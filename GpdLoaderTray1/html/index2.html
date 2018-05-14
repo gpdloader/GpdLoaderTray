@@ -1,0 +1,354 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=11" /> 
+    <title></title>
+    <script src="keydrown.min.js"></script>
+
+    <style>
+        * {
+            font-family:Arial,'Lucida Console',monospace;
+            font-size: 13px;
+            letter-spacing:1px;
+            font-weight:lighter;
+            color:dimgray;
+        }
+
+        .name {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .description{
+            font-weight:normal;
+            font-size:10px;
+        }
+
+        .label{
+            color:white;
+            width:150px;
+            display:inline-block;
+            vertical-align:top;
+        }
+
+        .item {
+            color: white;
+            height: 29px;
+            position: relative;
+            background-color: #151515;
+            vertical-align: middle;
+        }
+
+        .alt {
+            
+            background-color: black;
+            
+        }
+
+        .selected {
+            background-color: lightblue;
+            color: black !important;
+        }
+
+        .item_image {
+            left: 5px;
+            top: 5px;
+            position: relative;
+            height: 20px;
+            width: 20px;
+        }
+
+        .item_text {
+            position: relative;
+            left: 5px;
+            color: white;
+        }
+
+
+
+        
+
+    </style>
+
+    <script>
+
+        
+        function LoadFolder(name,sel) {
+            var f = folders[name];
+
+            
+
+            for (var i = 0; i < f.length; ++i) {
+                var d = document.createElement("DIV");
+                d.className = "item";
+                if (i == sel) d.className += " selected";
+                if (i % 2 == 1) d.className += " alt";
+
+                var im = document.createElement("IMG");
+                im.className = "item_image";
+
+                if (f[i].tip == "folder" || f[i].tip == "prev_folder") {
+
+                    im.src = "folder.ico";
+                }
+                else {
+                    im.src = "sync.ico";
+                }
+
+        
+                var a = document.createElement("A");
+                a.className = "item_text";
+                a.innerText = f[i].name;
+                if (i == sel) a.className += " selected";
+
+                d.appendChild(im);
+                d.appendChild(a);
+
+                document.getElementById("items").appendChild(d);
+            }
+            this.totalItems = f.length;
+            document.getElementById("navbar").innerText = name;
+            currentFolder = name;
+            this.selectedItem = sel;
+            LoadInfo(folders[currentFolder][selectedItem].name);
+        }
+
+        function fixScroll(sel) {
+            if (sel.offsetTop >= 551) {
+               document.getElementById("items").scrollTop += 29;
+            }
+
+            if ((sel.offsetTop - document.getElementById("items").scrollTop) < 29) {
+                document.getElementById("items").scrollTop -= 29;
+            }
+        }
+
+        var current_info;
+
+        function LoadInfo(item_name) {
+
+            var inp = window.external.GetItemInfo(item_name, currentFolder);
+
+            if (inp == "-1") return;
+
+            current_info = JSON.parse(inp);
+            document.getElementById("title").innerHTML = current_info.title;
+            document.getElementById("year").innerHTML = current_info.year;
+            document.getElementById("platform").innerHTML = current_info.platform;
+            document.getElementById("type").innerHTML = current_info.type;
+            document.getElementById("description").innerHTML = current_info.description;
+
+            if (current_info.picture == undefined) {
+                document.getElementById("picture").src = null;
+            }
+            else {
+                document.getElementById("picture").src = "..\\root\\" + currentFolder.replace("root:\\\\", "") + current_info.picture;
+            }
+
+        }
+
+        function moveDown() {
+            var itms = document.getElementById("items");
+            var sel; 
+            if (this.selectedItem != (itms.childNodes.length - 1)) {
+                
+                var prev_selected = itms.childNodes.item(this.selectedItem);
+                prev_selected.className = prev_selected.className.replace(" selected", "");
+                prev_selected.childNodes.item(1).className = prev_selected.childNodes.item(1).className.replace(" selected", "");
+
+                this.selectedItem += 1;
+
+                sel = itms.childNodes.item(this.selectedItem);
+                sel.className += " selected";
+                sel.childNodes.item(1).className += " selected";
+
+                //LoadInfo(folders[currentFolder][selectedItem].name);
+                var inp = window.external.GetItemInfo(folders[currentFolder][selectedItem].name, currentFolder);
+                current_info = JSON.parse(inp);
+                fixScroll(sel);
+            }
+        }
+
+        
+
+        function moveUp() {
+
+            var itms = document.getElementById("items");
+
+            if (this.selectedItem > 0) {
+
+                var prev_selected = itms.childNodes.item(this.selectedItem);
+                prev_selected.className = prev_selected.className.replace(" selected", "");
+                prev_selected.childNodes.item(1).className = prev_selected.childNodes.item(1).className.replace(" selected", "");
+
+                this.selectedItem -= 1;
+
+                var sel = itms.childNodes.item(this.selectedItem);
+                sel.className += " selected";
+                sel.childNodes.item(1).className += " selected";
+
+                //LoadInfo(folders[currentFolder][selectedItem].name);
+                var inp = window.external.GetItemInfo(folders[currentFolder][selectedItem].name, currentFolder);
+                current_info = JSON.parse(inp);
+                fixScroll(sel);
+
+            }
+        }
+
+        function enterFolder() {
+
+            if (folders[currentFolder][this.selectedItem].tip == "folder" || folders[currentFolder][this.selectedItem].tip == "prev_folder") {
+                document.getElementById("items").innerHTML = "";
+
+                var tip = folders[currentFolder][this.selectedItem].tip
+                if ( tip == "prev_folder") {
+                    var p = currentFolder.split("\\");
+                    var o = "";
+                    for (var i = 0; i < p.length - 2; ++i) {
+                        o += p[i] + "\\";
+                    }
+                    LoadFolder(o, previous_selected_item.pop());
+                }
+                else {
+                    previous_selected_item.push(this.selectedItem);
+                    LoadFolder(currentFolder + folders[currentFolder][this.selectedItem].name + "\\", 0);
+                    
+                }
+            }
+
+            if (folders[currentFolder][this.selectedItem].tip == "file") {
+                
+                window.external.Run(current_info.shortcut,currentFolder);
+
+            }
+
+        }
+
+        function backFolder() {
+
+            if (currentFolder != "root:\\\\") {
+
+                this.selectedItem = 0;
+                enterFolder();
+            }
+        }
+
+        function moveSelect(e) {
+
+            if(e.keyCode == 13){ enterFolder(); }
+            if (e.keyCode == 40) { moveDown(); }
+            if (e.keyCode == 38) { moveUp(); }
+
+            return;	
+        }
+
+        this.totalItems = 0;
+        this.selectedItem = 0;
+        var previous_selected_item = [];
+        var currentFolder = "root:\\\\";
+
+        var folders;
+
+        function init() {
+            //kd.run(function () {
+            //    kd.tick();
+            //});
+
+            kd.DOWN.down(function () {
+                moveSelect({keyCode:40}); 
+            });
+
+            kd.UP.down(function () {
+                moveSelect({ keyCode: 38 });
+            });
+
+            
+
+            //kd.P.up(function () {
+            //    console.clear();
+            //});
+            
+
+            //document.body.addEventListener("keydown", function (e) { moveSelect(e); }); 
+            
+            //LoadFolder(currentFolder, this.selectedItem);
+            //kd.DOWN.down();
+            
+            folders = JSON.parse(window.external.GetFolderData());
+            
+            LoadFolder(currentFolder, this.selectedItem);
+
+            //this.totalItems = document.getElementById("items").childNodes.length;
+
+        }
+
+        function updateBackground(toggle) {
+            
+            if (toggle == true) {
+                document.querySelector('img')
+                    .setAttributeNS('http://www.w3.org/1999/xlink', 'href', "background0.jpg");
+            }
+            else {
+                document.querySelector('img')
+                    .setAttributeNS('http://www.w3.org/1999/xlink', 'href', "background1.jpg");
+            }
+        }
+
+    </script>
+	
+</head>
+
+<body id="mask4" style="margin:0 0 0 0 ; padding:0 0 0 0;  position:absolute; background-color:white; width:1200px; height:600px;" onload="init();">
+
+
+    <svg id="divimg" width="1200px" height="600px" x="0" y="0" version="1.1"
+         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <defs>
+            <filter id="f1" x="0" y="0">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+            </filter>
+        </defs>
+
+        
+            <image id="img" x="0" y="0" width="100%" height="100%" filter="url(#f1)" />
+        
+    </svg>
+
+    <div style="position:absolute; width:563px; height:551px; top:28px; left:28px; border:1px solid white; background-color:white; opacity:0.2" ></div>
+
+    
+    <div id="nav" style="position:absolute; width:563px; height:551px; top:14px; left:14px; border:1px solid gray; background-color:#151515; display:block;">
+        <div  style="background-color:black; height:29px; position:relative;   "><a style=" position:relative; top:7px; left:5px; color:red; " id="navbar">root:\\</a></div>
+        <div id="items" style="-ms-overflow-style:none; overflow:auto; display:block; height:522px;"></div>
+        
+    
+    </div>
+
+    
+    <div id="img" style="position:absolute; width:549px; height:247px; top:28px; right:14px; border:1px solid white; background-color:white; opacity:0.2  "></div>
+
+    <img id="picture" style="position:absolute; top:14px; right:28px; border:1px solid gray; width:547px;height:247px; "  src="sample.png" />
+
+    <div id="desc" style="position:absolute; width:577px; height:277px; bottom:14px; right:14px; ">
+        <!--<div style="position:absolute; width:100%; height:100%; top:0px; left:0px;  background-color:white; opacity:0.2 " ></div>-->
+        <div style="position:relative;top:7px; left:7px; "><a class="label">Title : </a><a id="title" class="name">/</a> </div> <br />
+        <div style="position:relative;top:7px; left:7px; "><a class="label">Year : </a><a id="year" class="name">/</a> </div> <br />
+        <div style="position:relative;top:7px; left:7px; "><a class="label">Platform : </a><a id="platform" class="name">/</a> </div> <br />
+        <div style="position:relative;top:7px; left:7px; "><a class="label">Type : </a><a id="type" class="name">/</a> </div> <br />
+        <div style="position:relative;top:7px; left:7px; "><a class="label">Description : </a><a id="description" class="name description" style="width:410px; height:147px; display:inline-block; overflow:hidden;">/</a> </div> 
+
+      
+    
+    </div>
+
+
+
+
+
+</body>
+
+</html>

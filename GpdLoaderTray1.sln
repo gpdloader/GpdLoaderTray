@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpdLoaderTray1", "GpdLoaderTray1\GpdLoaderTray1.csproj", "{28EC263D-D32D-4839-97AF-3F81B49C2FF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportGBA2", "ImportGBA2\ImportGBA2.csproj", "{426D371A-5E22-47A8-AB5A-C788C83FCAE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImportExe1", "ImportExe1\ImportExe1.csproj", "{50CC7322-3E85-492B-906A-10AD7F8AD978}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28EC263D-D32D-4839-97AF-3F81B49C2FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28EC263D-D32D-4839-97AF-3F81B49C2FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28EC263D-D32D-4839-97AF-3F81B49C2FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28EC263D-D32D-4839-97AF-3F81B49C2FF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{426D371A-5E22-47A8-AB5A-C788C83FCAE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{426D371A-5E22-47A8-AB5A-C788C83FCAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{426D371A-5E22-47A8-AB5A-C788C83FCAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{426D371A-5E22-47A8-AB5A-C788C83FCAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50CC7322-3E85-492B-906A-10AD7F8AD978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50CC7322-3E85-492B-906A-10AD7F8AD978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50CC7322-3E85-492B-906A-10AD7F8AD978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50CC7322-3E85-492B-906A-10AD7F8AD978}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
