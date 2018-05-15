@@ -24,8 +24,8 @@ namespace ImportExe1
             string file = args[1];
             string outp_dir = args[2];
 
-            string name = Path.GetDirectoryName(file);
-            name = name.Substring(name.IndexOf("\\") + 1);
+            string name = Path.GetFileNameWithoutExtension(file);
+            //name = name.Substring(name.IndexOf("\\") + 1);
 
             Directory.CreateDirectory(outp_dir);
             
