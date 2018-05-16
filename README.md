@@ -33,7 +33,7 @@ Once activated application can load imported GBA and MSDOS games.
  - folders
  - customizable UI via HTML/CSS/JAVASCRIPT 
  - tested with GBA and MSDOS games with VisualBoyAdvance and DOSBox emulators, can also run any windows shortcut.
- - import many GBA games at once.
+ - import multiple GBA games.
  - import MSDOS games
  
 
