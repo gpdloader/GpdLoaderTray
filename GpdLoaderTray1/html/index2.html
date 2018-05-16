@@ -66,6 +66,16 @@
             left: 5px;
             color: white;
         }
+		
+		.meta {
+		   /*background-color:black;*/
+		   color:white;
+		   position:absolute; top:0px; left:25px; 
+		   overflow:auto;
+		   white-space:pre-wrap; word-wrap:break-word;
+		   overflow:hidden;
+		   height:260px;
+		}
 
 
 
@@ -113,7 +123,7 @@
             document.getElementById("navbar").innerText = name;
             currentFolder = name;
             this.selectedItem = sel;
-            //LoadInfo(folders[currentFolder][selectedItem].name);
+            setTimeout(function () { LoadInfo2(folders[currentFolder][selectedItem].name);  }, 1);
         }
 
         function fixScroll(sel) {
@@ -128,26 +138,30 @@
 
         var current_info;
 
-        function LoadInfo(item_name) {
+        function LoadInfo2(item_name) {
 
             var inp = window.external.GetItemInfo(item_name, currentFolder);
 
             if (inp == "-1") return;
-
+            
             current_info = JSON.parse(inp);
-            document.getElementById("title").innerHTML = current_info.title;
-            document.getElementById("year").innerHTML = current_info.year;
-            document.getElementById("platform").innerHTML = current_info.platform;
-            document.getElementById("type").innerHTML = current_info.type;
-            document.getElementById("description").innerHTML = current_info.description;
+            
+            var preMeta = document.getElementById("meta");
+            preMeta.innerHTML =
+                "Title : \t\t\t" + current_info.title.substring(0,57) + "\n\n" +
+                "Year : \t\t\t" + current_info.year + "\n\n" +
+                "Platform : \t\t" + current_info.platform + "\n\n" +
+                "Type : \t\t\t" + current_info.type + "\n\n" +
+                "Description : \t" + current_info.description;
+                
 
-            if (current_info.picture == undefined) {
-                document.getElementById("picture").src = null;
-            }
-            else {
-                document.getElementById("picture").src = "..\\root\\" + currentFolder.replace("root:\\\\", "") + current_info.picture;
-            }
-
+            //if (current_info.picture == undefined) {
+            //    document.getElementById("picture").src = null;
+            //}
+            //else {
+            //    document.getElementById("picture").src = "..\\root\\" + currentFolder.replace("root:\\\\", "") + current_info.picture;
+            //}
+            return;
         }
 
         function moveDown() {
@@ -165,7 +179,9 @@
                 sel.className += " selected";
                 sel.childNodes.item(1).className += " selected";
 
-                //LoadInfo(folders[currentFolder][selectedItem].name);
+                
+                setTimeout(function () { LoadInfo2(folders[currentFolder][selectedItem].name); }, 1);
+				
                 var inp = window.external.GetItemInfo(folders[currentFolder][selectedItem].name, currentFolder);
                 current_info = JSON.parse(inp);
                 fixScroll(sel);
@@ -190,7 +206,8 @@
                 sel.className += " selected";
                 sel.childNodes.item(1).className += " selected";
 
-                //LoadInfo(folders[currentFolder][selectedItem].name);
+                
+                setTimeout(function () { LoadInfo2(folders[currentFolder][selectedItem].name); }, 1);
                 var inp = window.external.GetItemInfo(folders[currentFolder][selectedItem].name, currentFolder);
                 current_info = JSON.parse(inp);
                 fixScroll(sel);
@@ -334,13 +351,8 @@
     <img id="picture" style="position:absolute; top:14px; right:28px; border:1px solid gray; width:547px;height:247px; "  src="sample.png" />
 
     <div id="desc" style="position:absolute; width:577px; height:277px; bottom:14px; right:14px; ">
-        <!--<div style="position:absolute; width:100%; height:100%; top:0px; left:0px;  background-color:white; opacity:0.2 " ></div>-->
-        <div style="position:relative;top:7px; left:7px; "><a class="label">Title : </a><a id="title" class="name">/</a> </div> <br />
-        <div style="position:relative;top:7px; left:7px; "><a class="label">Year : </a><a id="year" class="name">/</a> </div> <br />
-        <div style="position:relative;top:7px; left:7px; "><a class="label">Platform : </a><a id="platform" class="name">/</a> </div> <br />
-        <div style="position:relative;top:7px; left:7px; "><a class="label">Type : </a><a id="type" class="name">/</a> </div> <br />
-        <div style="position:relative;top:7px; left:7px; "><a class="label">Description : </a><a id="description" class="name description" style="width:410px; height:147px; display:inline-block; overflow:hidden;">/</a> </div> 
-
+        
+        <pre id="meta" class="meta"></pre>
       
     
     </div>
