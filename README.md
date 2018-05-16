@@ -17,10 +17,10 @@ Once activated application can load imported GBA and MSDOS games.
  5. switch to X-controller. (main loader screen will be displayed, switch off to hide screen)
 
 ## Usage (main loader screen)
- D-Pad Up/Down : move up/down 
- X Button :	enter/run item
- B Button + D-Pad Up/Down : fast move
- Y Button :	go to previous folder
+ - D-Pad Up/Down : move up/down 
+ - X Button :	enter/run item
+ - B Button + D-Pad Up/Down : fast move
+ - Y Button :	go to previous folder
 
 ## Importing games
  - before importing GBA or MSDOS games make sure emulators are installed and configured.
