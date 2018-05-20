@@ -123,6 +123,7 @@
             document.getElementById("navbar").innerText = name;
             currentFolder = name;
             this.selectedItem = sel;
+            //LoadInfo(folders[currentFolder][selectedItem].name);
             setTimeout(function () { LoadInfo2(folders[currentFolder][selectedItem].name);  }, 1);
         }
 
@@ -138,25 +139,56 @@
 
         var current_info;
 
+        function LoadInfo(item_name) {
+
+            var inp = window.external.GetItemInfo(item_name, currentFolder);
+
+            if (inp == "-1") return;
+
+            current_info = JSON.parse(inp);
+            document.getElementById("title").innerHTML = current_info.title;
+            document.getElementById("year").innerHTML = current_info.year;
+            document.getElementById("platform").innerHTML = current_info.platform;
+            document.getElementById("type").innerHTML = current_info.type;
+            document.getElementById("description").innerHTML = current_info.description;
+
+            if (current_info.picture == undefined) {
+                document.getElementById("picture").src = null;
+            }
+            else {
+                document.getElementById("picture").src = "..\\root\\" + currentFolder.replace("root:\\\\", "") + current_info.picture;
+            }
+
+        }
+
         function LoadInfo2(item_name) {
 
             var inp = window.external.GetItemInfo(item_name, currentFolder);
 
             if (inp == "-1") return;
-            
+            //alert(0);
             current_info = JSON.parse(inp);
-            
+            //document.getElementById("title").innerHTML = current_info.title;
+            //document.getElementById("year").innerHTML = current_info.year;
+            //document.getElementById("platform").innerHTML = current_info.platform;
+            //document.getElementById("type").innerHTML = current_info.type;
+            //document.getElementById("description").innerHTML = current_info.description;
             var preMeta = document.getElementById("meta");
             preMeta.innerHTML =
                 "Title : \t\t\t" + current_info.title.substring(0,57) + "\n\n" +
                 "Year : \t\t\t" + current_info.year + "\n\n" +
                 "Platform : \t\t" + current_info.platform + "\n\n" +
                 "Type : \t\t\t" + current_info.type + "\n\n" +
-                "Description : \t" + current_info.description;
-                
-
+                "Description : \n\n" + current_info.description;
+               setTimeout(function(){ 
+            document.getElementById("picture").src = "..\\root\\" + currentFolder.replace("root:\\\\", "") + current_info.picture;},25);
             //if (current_info.picture == undefined) {
-            //    document.getElementById("picture").src = null;
+              
+			  
+			  /*
+			  document.getElementById("picture").src = "http://www.planetemu.net/data/screenshots/Nintendo - Game - Boy - Advance/" + current_info.title + ".png" ;
+			  document.getElementById("picture").src = "http://www.thecoverproject.net/images/covers/gba_cartoonetworkspeedway_2_thumb.jpg";*/
+			  
             //}
             //else {
             //    document.getElementById("picture").src = "..\\root\\" + currentFolder.replace("root:\\\\", "") + current_info.picture;
@@ -179,9 +211,9 @@
                 sel.className += " selected";
                 sel.childNodes.item(1).className += " selected";
 
-                
+                //LoadInfo(folders[currentFolder][selectedItem].name);
                 setTimeout(function () { LoadInfo2(folders[currentFolder][selectedItem].name); }, 1);
-				
+				//LoadInfo2(folders[currentFolder][selectedItem].name);
                 var inp = window.external.GetItemInfo(folders[currentFolder][selectedItem].name, currentFolder);
                 current_info = JSON.parse(inp);
                 fixScroll(sel);
@@ -206,7 +238,7 @@
                 sel.className += " selected";
                 sel.childNodes.item(1).className += " selected";
 
-                
+                //LoadInfo(folders[currentFolder][selectedItem].name);
                 setTimeout(function () { LoadInfo2(folders[currentFolder][selectedItem].name); }, 1);
                 var inp = window.external.GetItemInfo(folders[currentFolder][selectedItem].name, currentFolder);
                 current_info = JSON.parse(inp);
